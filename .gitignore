@@ -28,3 +28,5 @@ _ReSharper*/
 [Bb]in
 [Dd]ebug*/
 [Rr]elease*/
+*.dotCover
+*.docstates
