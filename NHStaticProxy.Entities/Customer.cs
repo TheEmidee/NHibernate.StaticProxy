@@ -9,9 +9,13 @@ namespace NHStaticProxy.Entities
         {
             Orders = new HashedSet<Order>();
         }
+
+        public int Id { get; set; }
         
         public string Name { get; set; }
-        public int Id { get; set; }
+
+        public string NotMapped { get; set; }
+        
         public ISet<Order> Orders { get; set; }
         
         public void AddOrder(Order order)
