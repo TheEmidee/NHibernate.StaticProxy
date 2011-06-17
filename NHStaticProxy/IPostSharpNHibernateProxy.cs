@@ -4,6 +4,6 @@ namespace NHStaticProxy
 {
     public interface IPostSharpNHibernateProxy : INHibernateProxy
     {
-        void SetInterceptor(LazyInitializer postSharpInitializer);
+        void SetInterceptor(IStaticProxyLazyInitializer postSharpInitializer);
     }
 }

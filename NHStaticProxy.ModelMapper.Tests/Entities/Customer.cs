@@ -1,6 +1,6 @@
 ﻿using Iesi.Collections.Generic;
 
-namespace NHStaticProxy.Entities
+namespace NHStaticProxy.ModelMapper.Tests.Entities
 {
     [StaticProxy]
     public class Customer

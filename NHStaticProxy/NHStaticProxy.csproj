@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AbstractLazyInitializer.cs" />
     <Compile Include="IPostSharpNHibernateProxy.cs" />
+    <Compile Include="IStaticProxyLazyInitializer.cs" />
     <Compile Include="LazyInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyFactory.cs" />

@@ -5,11 +5,11 @@ using PostSharp.Aspects;
 
 namespace NHStaticProxy
 {
-    public class LazyInitializer : AbstractLazyInitializer
+    public class StaticProxyLazyInitializer : AbstractLazyInitializer, IStaticProxyLazyInitializer
     {
         private readonly Type persistentClass;
 
-        public LazyInitializer(string entityName, Type persistentClass, object identifier, ISessionImplementor session)
+        public StaticProxyLazyInitializer(string entityName, Type persistentClass, object identifier, ISessionImplementor session)
             : base(entityName, identifier, session)
         {
             this.persistentClass = persistentClass;

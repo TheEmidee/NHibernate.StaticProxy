@@ -21,6 +21,9 @@ namespace NHStaticProxy
         [NonSerialized]
         private IEnumerable<PropertyInfo> mappedProps = Enumerable.Empty<PropertyInfo>();
 
+        [NonSerialized]
+        private IStaticProxyLazyInitializer interceptor;
+
         private static IList<HbmMapping> mappings;
 
         public override bool CompileTimeValidate(Type type)
@@ -45,9 +48,9 @@ namespace NHStaticProxy
 
 
             mappedProps = from mapping in mappings
-                          let rc = (from hbmClass in mapping.RootClasses where hbmClass.Name == type.Name select hbmClass).SingleOrDefault()
-                          where rc != null
-                          from item in rc.Items
+                          let hbmClasses = from hbmClass in mapping.RootClasses where hbmClass.Name == type.Name select hbmClass
+                          from rootClass in hbmClasses where rootClass != null
+                          from item in rootClass.Items
                           let propertyMapping = item as IEntityPropertyMapping
                           where propertyMapping != null
                           select type.GetProperty(propertyMapping.Name);
@@ -64,7 +67,7 @@ namespace NHStaticProxy
             return mappedProps;
         }
 
-        private LazyInitializer GetProxy(AdviceArgs args)
+        private IStaticProxyLazyInitializer GetProxy(AdviceArgs args)
         {
             var proxy = args.Instance as INHibernateProxy;
 
@@ -76,7 +79,7 @@ namespace NHStaticProxy
             if (initializer == null)
                 return null;
 
-            return ((LazyInitializer)initializer);
+            return ((IStaticProxyLazyInitializer)initializer);
         }
 
         [OnLocationGetValueAdvice, MethodPointcut("MappedProperties")]
@@ -107,13 +110,10 @@ namespace NHStaticProxy
             args.ProceedSetValue();
         }
 
-        public void SetInterceptor(LazyInitializer postSharpInitializer)
+        public void SetInterceptor(IStaticProxyLazyInitializer postSharpInitializer)
         {
             interceptor = postSharpInitializer;
         }
-
-        [NonSerialized]
-        private LazyInitializer interceptor;
 
         public ILazyInitializer HibernateLazyInitializer
         {

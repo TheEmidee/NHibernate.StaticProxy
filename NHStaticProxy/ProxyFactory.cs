@@ -9,7 +9,7 @@ namespace NHStaticProxy
         public override INHibernateProxy GetProxy(object id, ISessionImplementor session)
         {
             var instance = (IPostSharpNHibernateProxy)Activator.CreateInstance(PersistentClass);
-            var initializer = new LazyInitializer(EntityName, PersistentClass, id, session);
+            var initializer = new StaticProxyLazyInitializer(EntityName, PersistentClass, id, session);
 
             instance.SetInterceptor(initializer);
 
