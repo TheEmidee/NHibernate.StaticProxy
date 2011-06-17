@@ -1,0 +1,48 @@
+Windows Registry Editor Version 5.00
+
+[$RootKey$\InstalledProducts\VsPackage]
+"Package"="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+"UseInterface"=dword:00000001
+[$RootKey$\Packages\{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}]
+@="PostSharp.VisualStudio.VsPackage, PostSharp.VisualStudio.v9, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7"
+"InprocServer32"="%windir%\\SYSTEM32\\MSCOREE.DLL"
+"Class"="PostSharp.VisualStudio.VsPackage"
+"Assembly"="PostSharp.VisualStudio.v9, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7"
+[$RootKey$\AutoLoadPackages\{adfc4e64-0397-11d1-9f4e-00a0c911004f}]
+"{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"=dword:00000000
+[$RootKey$\Packages\{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}]
+"ID"=dword:00000001
+"MinEdition"="Standard"
+"ProductVersion"="2.0"
+"ProductName"="PostSharp"
+"CompanyName"="SharpCrafters s.r.o."
+[$RootKey$\Menus]
+"{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"=", 1000, 1"
+[$RootKey$\ToolsOptionsPages\PostSharp]
+@="#0"
+"Package"="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+[$RootKey$\ToolsOptionsPages\PostSharp\General]
+@="#0"
+"Package"="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+"Page"="{0fdcf28e-73f5-40ad-8ed1-57f313d8f0ff}"
+[$RootKey$\AutomationProperties\PostSharp\General]
+"Name"="PostSharp.General"
+"Package"="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+[$RootKey$\Services\{4b21326c-8c09-4b66-a10e-62bbe5eaa057}]
+@="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+"Name"="ICodeService"
+[$RootKey$\Services\{d5f3b88e-a1f9-47a8-9958-5d4fc3433b7a}]
+@="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+"Name"="IOptionsService"
+[$RootKey$\Services\{2352f1cf-34fc-4cf9-81c5-8dec959547fa}]
+@="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+"Name"="IQuickInfoContentService"
+[$RootKey$\Services\{fdfb5065-0758-4c29-a7da-776d71d386dd}]
+@="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+"Name"="IUiService"
+[$RootKey$\ToolWindows\{da6ea4cb-a0fb-49f3-803c-16ae710ac197}]
+@="{b6c9d1ce-e855-49dd-bdb3-8ef0c11981dc}"
+"Name"="PostSharp.VisualStudio.AspectExplorerToolWindow"
+"Style"="Tabbed"
+"Window"="{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+
