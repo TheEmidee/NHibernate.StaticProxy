@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy", "NHStaticPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy.Tests", "NHStaticProxy.Tests\NHStaticProxy.Tests.csproj", "{504640F1-6696-4131-8684-7F13590BBD81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy.Entities", "NHStaticProxy.Entities\NHStaticProxy.Entities.csproj", "{97F04B44-AE31-46A7-8B6A-6B3F4E3B1C05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{504640F1-6696-4131-8684-7F13590BBD81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{504640F1-6696-4131-8684-7F13590BBD81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{504640F1-6696-4131-8684-7F13590BBD81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97F04B44-AE31-46A7-8B6A-6B3F4E3B1C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97F04B44-AE31-46A7-8B6A-6B3F4E3B1C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97F04B44-AE31-46A7-8B6A-6B3F4E3B1C05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97F04B44-AE31-46A7-8B6A-6B3F4E3B1C05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
