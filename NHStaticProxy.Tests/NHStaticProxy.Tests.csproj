@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanCreateNHibernateSessionFactoryWithLazyLoadingAndNoVirtuals.cs" />
+    <Compile Include="SavingInstanceToDatabase.cs" />
     <Compile Include="Config\HbmMappingProvider.cs" />
     <Compile Include="Config\IHbmMappingProvider.cs" />
     <Compile Include="Config\NHConfigurator.cs" />
