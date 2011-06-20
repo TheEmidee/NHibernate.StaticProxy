@@ -21,6 +21,7 @@ namespace NHStaticProxy.Tests
                 Assert.NotEqual(0, obj.Id);
                 custId = obj.Id;
             }
+
             using (var s = SessionFactory.OpenSession())
             using (var tx = s.BeginTransaction())
             {

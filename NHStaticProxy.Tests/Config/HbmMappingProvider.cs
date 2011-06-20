@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHStaticProxy.Tests.Entities;
@@ -12,17 +11,20 @@ namespace NHStaticProxy.Tests.Config
         {
             get
             {
-                var mapper = new NHibernate.Mapping.ByCode.ModelMapper();
+                var mapper = new ModelMapper();
 
                 mapper.Class<Customer>(customer =>
                 {
                     customer.Id(mt => mt.Id,
-                          idm =>
-                          {
-                              idm.Generator(Generators.Native);
-                          });
+                          idm => idm.Generator(Generators.Native));
 
                     customer.Property(mt => mt.Name);
+
+                    customer.Property(p => p.PropertyWithField,
+                                      m => m.Access(Accessor.Field));
+
+                    customer.Property("fieldOnly", m => { });
+
                     customer.Set(p => p.Orders,
                                  cm =>
                                  {
@@ -37,10 +39,7 @@ namespace NHStaticProxy.Tests.Config
                     order.Table("Orders");
                     
                     order.Id(mt => mt.Id,
-                          idm =>
-                          {
-                              idm.Generator(Generators.Native);
-                          });
+                          idm => idm.Generator(Generators.Native));
 
                     order.Property(mt => mt.Name);
                     order.ManyToOne(p => p.Customer);

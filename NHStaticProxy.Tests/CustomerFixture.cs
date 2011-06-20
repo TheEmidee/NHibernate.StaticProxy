@@ -14,7 +14,12 @@ namespace NHStaticProxy.Tests
             using (var s = sessionFactory.OpenSession())
             using (var tx = s.BeginTransaction())
             {
-                var obj = new Customer { Name = "Zoubi" };
+                var obj = new Customer
+                              {
+                                  Name = "Zoubi",
+                                  PropertyWithField = "Nick",
+                                  fieldOnly = "fieldOnly"
+                              };
                 s.Save(obj);
                 customerId = obj.Id;
                 tx.Commit();

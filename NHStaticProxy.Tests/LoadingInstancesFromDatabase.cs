@@ -100,6 +100,37 @@ namespace NHStaticProxy.Tests
         }
 
         [Fact]
+        public void CanLazyLoadPropertiesWithBackingField()
+        {
+            using (var s = SessionFactory.OpenSession())
+            {
+                var customer = s.Load<Customer>(customerId);
+                Assert.Equal("Nick", customer.PropertyWithField);
+            }
+        }
+
+        [Fact]
+        public void LazyLoadingPropertiesWithBackingFieldDoesntExecuteSetter()
+        {
+            using (var s = SessionFactory.OpenSession())
+            {
+                var customer = s.Load<Customer>(customerId);
+                Assert.Equal("Nick", customer.PropertyWithField);
+                Assert.NotEqual(100, customer.Dummy);
+            }
+        }
+
+        [Fact]
+        public void CanLazyLoadFields()
+        {
+            using (var s = SessionFactory.OpenSession())
+            {
+                var customer = s.Load<Customer>(customerId);
+                Assert.Equal("fieldOnly", customer.fieldOnly);
+            }
+        }
+
+        [Fact]
         public void CanCallMethodsWithParameters()
         {
             using (var s = SessionFactory.OpenSession())

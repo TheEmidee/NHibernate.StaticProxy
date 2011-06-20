@@ -16,13 +16,15 @@ namespace NHStaticProxy.ModelMapper.Tests
                 mapper.Class<Customer>(customer =>
                 {
                     customer.Id(mt => mt.Id,
-                          idm =>
-                          {
-                              idm.Access(Accessor.Field);
-                              idm.Generator(Generators.Native);
-                          });
+                          idm => idm.Generator(Generators.Native));
 
                     customer.Property(mt => mt.Name);
+
+                    customer.Property(p => p.PropertyWithField,
+                                      m => m.Access(Accessor.Field));
+
+                    customer.Property("fieldOnly", m => { });
+
                     customer.Set(p => p.Orders,
                                  cm =>
                                  {

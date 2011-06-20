@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 
 using System;
+using System.Reflection;
 using Moq;
 using NHStaticProxy.ModelMapper.Tests.Entities;
 using PostSharp;
@@ -47,6 +48,72 @@ namespace NHStaticProxy.ModelMapper.Tests
             nhProxy.SetInterceptor(stub.Object);
 
             var str = cust.Name;
+
+            stub.Verify(x => x.InterceptGet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+        }
+
+        [Fact]
+        public void MappedPropertiesWithBackingFieldSetters_AreIntercepted_WhenEntityIsProxy()
+        {
+            var cust = new Customer();
+
+            var stub = new Mock<IStaticProxyLazyInitializer>();
+
+            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+
+            nhProxy.SetInterceptor(stub.Object);
+
+            cust.PropertyWithField = "PropertyWithField";
+
+            stub.Verify(x => x.InterceptSet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+        }
+
+        [Fact]
+        public void MappedPropertiesWithBackingFieldGetters_AreIntercepted_WhenEntityIsProxy()
+        {
+            var cust = new Customer();
+            cust.PropertyWithField = "PropertyWithField";
+
+            var stub = new Mock<IStaticProxyLazyInitializer>();
+
+            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+
+            nhProxy.SetInterceptor(stub.Object);
+
+            var str = cust.PropertyWithField;
+
+            stub.Verify(x => x.InterceptGet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+        }
+
+        [Fact]
+        public void MappedFieldsSetters_AreIntercepted_WhenEntityIsProxy()
+        {
+            var cust = new Customer();
+
+            var stub = new Mock<IStaticProxyLazyInitializer>();
+
+            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+
+            nhProxy.SetInterceptor(stub.Object);
+
+            cust.fieldOnly = "fieldOnly";
+
+            stub.Verify(x => x.InterceptSet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+        }
+
+        [Fact]
+        public void MappedFieldsGetters_AreIntercepted_WhenEntityIsProxy()
+        {
+            var cust = new Customer();
+            cust.fieldOnly = "fieldOnly";
+
+            var stub = new Mock<IStaticProxyLazyInitializer>();
+
+            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+
+            nhProxy.SetInterceptor(stub.Object);
+
+            var str = cust.PropertyWithField;
 
             stub.Verify(x => x.InterceptGet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
         }

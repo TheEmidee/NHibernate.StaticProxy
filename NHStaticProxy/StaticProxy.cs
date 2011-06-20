@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NHibernate.Cfg.MappingSchema;
+using NHibernate.Mapping.ByCode;
+using NHibernate.Properties;
 using NHibernate.Proxy;
 using PostSharp.Aspects;
 using PostSharp.Aspects.Advices;
 using PostSharp.Extensibility;
+using PostSharp.Reflection;
 
 namespace NHStaticProxy
 {
@@ -19,7 +22,10 @@ namespace NHStaticProxy
         private bool hasErrors = false;
 
         [NonSerialized]
-        private IEnumerable<PropertyInfo> mappedProps = Enumerable.Empty<PropertyInfo>();
+        private readonly IList<PropertyInfo> mappedProps = new List<PropertyInfo>();
+
+        [NonSerialized]
+        private readonly IList<FieldInfo> mappedFields = new List<FieldInfo>();
 
         [NonSerialized]
         private IStaticProxyLazyInitializer interceptor;
@@ -49,24 +55,45 @@ namespace NHStaticProxy
                 mappings = attribute.HbmMappings.ToList();
             }
 
-            mappedProps = from mapping in mappings
-                          let hbmClasses = from hbmClass in mapping.RootClasses where hbmClass.Name == type.Name select hbmClass
-                          from rootClass in hbmClasses where rootClass != null
-                          from item in rootClass.Items
-                          let propertyMapping = item as IEntityPropertyMapping
-                          where propertyMapping != null
-                          select type.GetProperty(propertyMapping.Name);
+            SetMappings(type);
 
-            if (mappedProps.Any())
+            if (mappedProps.Any() || mappedFields.Any())
                 return;
 
             hasErrors = true;
             Message.Write(SeverityType.Warning, "CUSTOM02", string.Format("Impossible to find a mapping file for the type {0}.", type.Name));
         }
 
+        private void SetMappings(Type type)
+        {
+            var propertyMappings = from mapping in mappings
+                                   let hbmClasses = from hbmClass in mapping.RootClasses where hbmClass.Name == type.Name select hbmClass
+                                   from rootClass in hbmClasses
+                                   where rootClass != null
+                                   from propertyMapping in rootClass.Items.OfType<IEntityPropertyMapping>()
+                                   select propertyMapping;
+
+            foreach (var propertyMapping in propertyMappings)
+            {
+                if (propertyMapping.Access != null && propertyMapping.Access == "field")
+                {
+                    var fieldInfo = type.GetField(propertyMapping.Name, BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+
+                    mappedFields.Add(fieldInfo);
+                }
+                else
+                    mappedProps.Add(type.GetProperty(propertyMapping.Name));
+            }
+        }
+
         private IEnumerable<PropertyInfo> MappedProperties(Type type)
         {
             return mappedProps;
+        }
+
+        private IEnumerable<FieldInfo> MappedFields(Type type)
+        {
+            return mappedFields;
         }
 
         private IStaticProxyLazyInitializer GetProxy(AdviceArgs args)
@@ -84,8 +111,7 @@ namespace NHStaticProxy
             return ((IStaticProxyLazyInitializer)initializer);
         }
 
-        [OnLocationGetValueAdvice, MethodPointcut("MappedProperties")]
-        public void OnLocationGetValue(LocationInterceptionArgs args)
+        private void DoOnLocationGetValue(LocationInterceptionArgs args)
         {
             var proxy = GetProxy(args);
 
@@ -98,8 +124,7 @@ namespace NHStaticProxy
             args.ProceedGetValue();
         }
 
-        [OnLocationSetValueAdvice, MethodPointcut("MappedProperties")]
-        public void OnLocationSetValue(LocationInterceptionArgs args)
+        private void DoOnLocationSetValue(LocationInterceptionArgs args)
         {
             var proxy = GetProxy(args);
 
@@ -110,6 +135,30 @@ namespace NHStaticProxy
             }
 
             args.ProceedSetValue();
+        }
+
+        [OnLocationGetValueAdvice, MethodPointcut("MappedProperties")]
+        public void OnLocationGetValue(LocationInterceptionArgs args)
+        {
+            DoOnLocationGetValue(args);
+        }
+
+        [OnLocationSetValueAdvice(Master = "OnLocationGetValue")]
+        public void OnLocationSetValue(LocationInterceptionArgs args)
+        {
+            DoOnLocationSetValue(args);
+        }
+
+        [OnLocationGetValueAdvice, MethodPointcut("MappedFields")]
+        public void FieldOnLocationGetValue(LocationInterceptionArgs args)
+        {
+            DoOnLocationGetValue(args);
+        }
+
+        [OnLocationSetValueAdvice(Master = "FieldOnLocationGetValue")]
+        public void FieldOnLocationSetValue(LocationInterceptionArgs args)
+        {
+            DoOnLocationSetValue(args);
         }
 
         public void SetInterceptor(IStaticProxyLazyInitializer postSharpInitializer)
