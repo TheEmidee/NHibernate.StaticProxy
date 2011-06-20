@@ -1,16 +1,16 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using NHStaticProxy.Tests;
+using NHStaticProxy.Resources.Tests;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NHStaticProxy.Tests")]
+[assembly: AssemblyTitle("NHStaticProxy.Resources.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NHStaticProxy.Tests")]
+[assembly: AssemblyProduct("NHStaticProxy.Resources.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +21,7 @@ using NHStaticProxy.Tests;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7c368340-0b5c-4b7b-87ce-51856e4b8c67")]
+[assembly: Guid("c3c99b81-f723-4724-b961-53bd62ccf8f8")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -36,4 +36,4 @@ using NHStaticProxy.Tests;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: ModelMapperStaticProxyConfigurationAttribute]
+[assembly: ResourcesStaticProxyConfiguration]

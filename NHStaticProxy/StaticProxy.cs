@@ -37,15 +37,17 @@ namespace NHStaticProxy
             {
                 object[] attributes = type.Assembly.GetCustomAttributes(typeof(StaticProxyConfigurationAttribute), true);
 
-                StaticProxyConfigurationAttribute attribute = null;
-                if (attributes.Length > 0)
+                if (attributes.Length == 0)
                 {
-                    attribute = attributes[0] as StaticProxyConfigurationAttribute;
-
-                    mappings = attribute.HbmMappings.ToList();
+                    hasErrors = true;
+                    Message.Write(SeverityType.Error, "CUSTOM02", string.Format("Impossible to find an assembly attribute derived from StaticProxyConfigurationAttribute in the assembly {0}.", type.Assembly.FullName));
+                    return;
                 }
-            }
 
+                var attribute = attributes[0] as StaticProxyConfigurationAttribute;
+
+                mappings = attribute.HbmMappings.ToList();
+            }
 
             mappedProps = from mapping in mappings
                           let hbmClasses = from hbmClass in mapping.RootClasses where hbmClass.Name == type.Name select hbmClass
