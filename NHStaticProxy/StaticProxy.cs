@@ -17,9 +17,6 @@ namespace NHStaticProxy
     public class StaticProxy : InstanceLevelAspect, IPostSharpNHibernateProxy
     {
         [NonSerialized]
-        private bool hasErrors = false;
-
-        [NonSerialized]
         private readonly IList<object> mappedMembers = new List<object>();
 
         [NonSerialized]
@@ -29,37 +26,41 @@ namespace NHStaticProxy
 
         public override bool CompileTimeValidate(Type type)
         {
-            return !hasErrors;
+            if (mappings == null)
+            {
+                Message.Write(SeverityType.Error, "CUSTOM02", string.Format("Impossible to find an assembly attribute derived from {0} in the assembly {1}.", typeof(StaticProxyConfigurationAttribute).FullName, type.Assembly.FullName));
+                return false;
+            }
+            
+            return true;
         }
 
         public override void CompileTimeInitialize(Type type, AspectInfo aspectInfo)
+        {
+            SetHbmMappings(type);
+
+            if (mappings == null)
+                return;
+
+            SetMappedMembers(type);
+        }
+
+        private void SetHbmMappings(Type type)
         {
             if (mappings == null)
             {
                 object[] attributes = type.Assembly.GetCustomAttributes(typeof(StaticProxyConfigurationAttribute), true);
 
                 if (attributes.Length == 0)
-                {
-                    hasErrors = true;
-                    Message.Write(SeverityType.Error, "CUSTOM02", string.Format("Impossible to find an assembly attribute derived from StaticProxyConfigurationAttribute in the assembly {0}.", type.Assembly.FullName));
                     return;
-                }
 
                 var attribute = attributes[0] as StaticProxyConfigurationAttribute;
 
                 mappings = attribute.HbmMappings.ToList();
             }
-
-            SetMappings(type);
-
-            if (mappedMembers.Any())
-                return;
-
-            hasErrors = true;
-            Message.Write(SeverityType.Warning, "ERROR", string.Format("Impossible to find a mapping file for the type {0}.", type.Name));
         }
 
-        private void SetMappings(Type type)
+        private void SetMappedMembers(Type type)
         {
             var propertyMappings = from mapping in mappings
                                    let hbmClasses = from hbmClass in mapping.RootClasses where hbmClass.Name == type.Name select hbmClass

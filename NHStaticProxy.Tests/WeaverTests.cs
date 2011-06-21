@@ -1,5 +1,6 @@
 // ReSharper disable InconsistentNaming
 
+using System;
 using Moq;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
@@ -13,28 +14,17 @@ namespace NHStaticProxy.Tests
     public class WeaverTests
     {
         [Fact]
-        public void Test()
-        {
-            var att = new ModelMapperStaticProxyConfigurationAttribute();
-            
-            var cfg = new Configuration();
-
-            cfg.DataBaseIntegration(db =>
-                                        {
-                                            db.Dialect<GenericDialect>();
-                                        });
-
-            foreach (var hbmMapping in att.HbmMappings)
-                cfg.AddDeserializedMapping(hbmMapping, "fnu");
-
-            
-        }
-        
-        [Fact]
         public void Entities_Implement_IPostSharpNHibernateProxy()
         {
-            Assert.Contains(typeof(IPostSharpNHibernateProxy), typeof(Customer).GetInterfaces());
-            Assert.Contains(typeof(IPostSharpNHibernateProxy), typeof(Order).GetInterfaces());
+            Assert.True(Activator.CreateInstance(typeof(Customer)) is IPostSharpNHibernateProxy);
+            Assert.True(Activator.CreateInstance(typeof(Order)) is IPostSharpNHibernateProxy);
+        }
+
+        [Fact]
+        public void Entities_DerivingFromBase_ImplementIPostSharpNHibernateProxy()
+        {
+            Assert.True(Activator.CreateInstance(typeof(Customer2)) is IPostSharpNHibernateProxy);
+            Assert.True(Activator.CreateInstance(typeof(Order2)) is IPostSharpNHibernateProxy);
         }
 
         [Fact]
