@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
-using FluentNHibernate.Cfg;
-using FluentNHibernate.Cfg.Db;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
-using NHStaticProxy.FluentNHibernate.Example.Entities;
+using NHStaticProxy.Examples.Entities;
 
-namespace NHStaticProxy.FluentNHibernate.Example
+namespace NHStaticProxy.Examples
 {
     public class FluentNHibernateStaticProxyConfigurationAttribute : StaticProxyConfigurationAttribute
     {
@@ -23,11 +21,11 @@ namespace NHStaticProxy.FluentNHibernate.Example
 
                 var di = Directory.CreateDirectory(tempFolder);
 
-                var fc = Fluently.Configure(cfg)
-                    .Database(SQLiteConfiguration.Standard.InMemory)
-                    .Mappings(mc => mc.FluentMappings.AddFromAssemblyOf<Customer>().ExportTo(tempFolder));
+                //var fc = Fluently.Configure(cfg)
+                //    .Database(SQLiteConfiguration.Standard.InMemory)
+                //    .Mappings(mc => mc.FluentMappings.AddFromAssemblyOf<Customer>().ExportTo(tempFolder));
 
-                fc.BuildConfiguration();
+                //fc.BuildConfiguration();
 
                 foreach (var file in di.EnumerateFiles())
                 {
