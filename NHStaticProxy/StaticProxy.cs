@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NHibernate.Cfg.MappingSchema;
-using NHibernate.Mapping.ByCode;
-using NHibernate.Properties;
 using NHibernate.Proxy;
 using PostSharp.Aspects;
 using PostSharp.Aspects.Advices;
@@ -22,10 +20,7 @@ namespace NHStaticProxy
         private bool hasErrors = false;
 
         [NonSerialized]
-        private readonly IList<PropertyInfo> mappedProps = new List<PropertyInfo>();
-
-        [NonSerialized]
-        private readonly IList<FieldInfo> mappedFields = new List<FieldInfo>();
+        private readonly IList<object> mappedMembers = new List<object>();
 
         [NonSerialized]
         private IStaticProxyLazyInitializer interceptor;
@@ -57,11 +52,11 @@ namespace NHStaticProxy
 
             SetMappings(type);
 
-            if (mappedProps.Any() || mappedFields.Any())
+            if (mappedMembers.Any())
                 return;
 
             hasErrors = true;
-            Message.Write(SeverityType.Warning, "CUSTOM02", string.Format("Impossible to find a mapping file for the type {0}.", type.Name));
+            Message.Write(SeverityType.Warning, "ERROR", string.Format("Impossible to find a mapping file for the type {0}.", type.Name));
         }
 
         private void SetMappings(Type type)
@@ -79,21 +74,16 @@ namespace NHStaticProxy
                 {
                     var fieldInfo = type.GetField(propertyMapping.Name, BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
-                    mappedFields.Add(fieldInfo);
+                    mappedMembers.Add(new LocationInfo(fieldInfo));
                 }
                 else
-                    mappedProps.Add(type.GetProperty(propertyMapping.Name));
+                    mappedMembers.Add(new LocationInfo(type.GetProperty(propertyMapping.Name)));
             }
         }
 
-        private IEnumerable<PropertyInfo> MappedProperties(Type type)
+        private IEnumerable<object> MappedMembers(Type type)
         {
-            return mappedProps;
-        }
-
-        private IEnumerable<FieldInfo> MappedFields(Type type)
-        {
-            return mappedFields;
+            return mappedMembers;
         }
 
         private IStaticProxyLazyInitializer GetProxy(AdviceArgs args)
@@ -110,8 +100,9 @@ namespace NHStaticProxy
 
             return ((IStaticProxyLazyInitializer)initializer);
         }
-
-        private void DoOnLocationGetValue(LocationInterceptionArgs args)
+        
+        [OnLocationGetValueAdvice, MethodPointcut("MappedMembers")]
+        public void OnLocationGetValue(LocationInterceptionArgs args)
         {
             var proxy = GetProxy(args);
 
@@ -124,7 +115,8 @@ namespace NHStaticProxy
             args.ProceedGetValue();
         }
 
-        private void DoOnLocationSetValue(LocationInterceptionArgs args)
+        [OnLocationSetValueAdvice(Master = "OnLocationGetValue")]
+        public void OnLocationSetValue(LocationInterceptionArgs args)
         {
             var proxy = GetProxy(args);
 
@@ -135,30 +127,6 @@ namespace NHStaticProxy
             }
 
             args.ProceedSetValue();
-        }
-
-        [OnLocationGetValueAdvice, MethodPointcut("MappedProperties")]
-        public void OnLocationGetValue(LocationInterceptionArgs args)
-        {
-            DoOnLocationGetValue(args);
-        }
-
-        [OnLocationSetValueAdvice(Master = "OnLocationGetValue")]
-        public void OnLocationSetValue(LocationInterceptionArgs args)
-        {
-            DoOnLocationSetValue(args);
-        }
-
-        [OnLocationGetValueAdvice, MethodPointcut("MappedFields")]
-        public void FieldOnLocationGetValue(LocationInterceptionArgs args)
-        {
-            DoOnLocationGetValue(args);
-        }
-
-        [OnLocationSetValueAdvice(Master = "FieldOnLocationGetValue")]
-        public void FieldOnLocationSetValue(LocationInterceptionArgs args)
-        {
-            DoOnLocationSetValue(args);
         }
 
         public void SetInterceptor(IStaticProxyLazyInitializer postSharpInitializer)

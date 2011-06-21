@@ -5,9 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy", "NHStaticPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy.Tests", "NHStaticProxy.Tests\NHStaticProxy.Tests.csproj", "{504640F1-6696-4131-8684-7F13590BBD81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy.ModelMapper.Tests", "NHStaticProxy.ModelMapper.Tests\NHStaticProxy.ModelMapper.Tests.csproj", "{DB04EFFF-5907-40FA-A6E2-DEEA0CE8D0EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy.Examples", "NHStaticProxy.Examples\NHStaticProxy.Examples.csproj", "{8B0CA1AA-3756-4081-85FF-351F27AD1370}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy.Resources.Tests", "NHStaticProxy.Resources.Tests\NHStaticProxy.Resources.Tests.csproj", "{19D30CF6-5BB5-4E60-A18E-E3511775F2B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHStaticProxy.FluentNHibernate.Example", "NHStaticProxy.FluentNHibernate.Example\NHStaticProxy.FluentNHibernate.Example.csproj", "{A853B4B5-FAA1-4673-9607-E576B5526317}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +23,14 @@ Global
 		{504640F1-6696-4131-8684-7F13590BBD81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{504640F1-6696-4131-8684-7F13590BBD81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{504640F1-6696-4131-8684-7F13590BBD81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB04EFFF-5907-40FA-A6E2-DEEA0CE8D0EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB04EFFF-5907-40FA-A6E2-DEEA0CE8D0EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB04EFFF-5907-40FA-A6E2-DEEA0CE8D0EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB04EFFF-5907-40FA-A6E2-DEEA0CE8D0EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19D30CF6-5BB5-4E60-A18E-E3511775F2B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19D30CF6-5BB5-4E60-A18E-E3511775F2B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19D30CF6-5BB5-4E60-A18E-E3511775F2B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19D30CF6-5BB5-4E60-A18E-E3511775F2B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B0CA1AA-3756-4081-85FF-351F27AD1370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0CA1AA-3756-4081-85FF-351F27AD1370}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B0CA1AA-3756-4081-85FF-351F27AD1370}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B0CA1AA-3756-4081-85FF-351F27AD1370}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A853B4B5-FAA1-4673-9607-E576B5526317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A853B4B5-FAA1-4673-9607-E576B5526317}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A853B4B5-FAA1-4673-9607-E576B5526317}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A853B4B5-FAA1-4673-9607-E576B5526317}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

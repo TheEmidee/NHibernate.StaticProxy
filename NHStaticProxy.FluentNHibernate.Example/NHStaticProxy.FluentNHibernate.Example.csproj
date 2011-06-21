@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{504640F1-6696-4131-8684-7F13590BBD81}</ProjectGuid>
+    <ProjectGuid>{A853B4B5-FAA1-4673-9607-E576B5526317}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NHStaticProxy.Tests</RootNamespace>
-    <AssemblyName>NHStaticProxy.Tests</AssemblyName>
+    <RootNamespace>NHStaticProxy.FluentNHibernate.Example</RootNamespace>
+    <AssemblyName>NHStaticProxy.FluentNHibernate.Example</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <DontImportPostSharp>True</DontImportPostSharp>
@@ -32,50 +32,42 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\packages\Iesi.Collections.3.2.0.2001\lib\Net35\Iesi.Collections.dll</HintPath>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.2.5.2\lib\NET35\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.1.2.0.712\lib\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.1.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\packages\NHibernate.3.2.0.2001\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.3.1.0.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.ByteCode.Castle">
+      <HintPath>..\packages\NHibernate.Castle.3.1.0.4000\lib\Net35\NHibernate.ByteCode.Castle.dll</HintPath>
     </Reference>
     <Reference Include="PostSharp">
       <HintPath>..\packages\PostSharp.2.1.1.5\lib\net20\PostSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="xunit">
-      <HintPath>..\packages\xunit.1.8.0.1545\lib\xunit.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CanCreateNHibernateSessionFactoryWithLazyLoadingAndNoVirtuals.cs" />
-    <Compile Include="SavingInstanceToDatabase.cs" />
-    <Compile Include="Config\HbmMappingProvider.cs" />
-    <Compile Include="Config\IHbmMappingProvider.cs" />
-    <Compile Include="Config\NHConfigurator.cs" />
-    <Compile Include="Config\NHibernateFixture.cs" />
-    <Compile Include="Config\NHTestsBase.cs" />
-    <Compile Include="CustomerFixture.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Order.cs" />
-    <Compile Include="LoadingInstancesFromDatabase.cs" />
-    <Compile Include="ModelMapperStaticProxyConfigurationAttribute.cs" />
+    <Compile Include="FluentNHibernateStaticProxyConfigurationAttribute.cs" />
+    <Compile Include="Mappings\CustomerMapping.cs" />
+    <Compile Include="Mappings\OrderMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Config\TestConnectionProvider.cs" />
-    <Compile Include="WeaverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="System.Data.SQLite.DLL">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NHStaticProxy\NHStaticProxy.csproj">
