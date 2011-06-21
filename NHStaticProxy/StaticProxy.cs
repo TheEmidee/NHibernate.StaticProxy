@@ -28,7 +28,13 @@ namespace NHStaticProxy
         {
             if (mappings == null)
             {
-                Message.Write(SeverityType.Error, "CUSTOM02", string.Format("Impossible to find an assembly attribute derived from {0} in the assembly {1}.", typeof(StaticProxyConfigurationAttribute).FullName, type.Assembly.FullName));
+                Message.Write(SeverityType.Error, "NoStaticProxyConfigurationAttribute", string.Format("Impossible to find an assembly attribute derived from {0} in the assembly {1}.", typeof(StaticProxyConfigurationAttribute).FullName, type.Assembly.FullName));
+                return false;
+            }
+
+            if (!mappedMembers.Any())
+            {
+                Message.Write(SeverityType.Warning, "NoMappings", string.Format("No mappings were found for the type: {0}.", type.FullName));
                 return false;
             }
             
