@@ -12,17 +12,17 @@ The benefits of using this project are:
 
 In order to get things work, you need to:
 
-1) Reference NHStaticProxy from the assembly which contains the entities declarations
+1) Reference NHibernate.StaticProxy from the assembly which contains the entities declarations
 
-2) Create a new class in the same assembly, inheriting from NHStaticProxy.StaticProxyConfigurationAttribute
-   This class must return a list of HbmMapping. There are several examples on how to derive this class in the NHStaticProxy.Examples project (using mapping by code, resources files, or Fluent NHibernate)
+2) Create a new class in the same assembly, inheriting from NHibernate.StaticProxy.StaticProxyConfigurationAttribute
+   This class must return a list of HbmMapping. There are several examples on how to derive this class in the NHibernate.StaticProxy.Examples project (using mapping by code, resources files, or Fluent NHibernate)
 
 3) In the AssemblyInfo.cs file of the same assembly, add a reference to this class as an assembly attribute. For example : [assembly: ModelMapperStaticProxyConfigurationAttribute]
 
 4) To make Postsharp wave your entities classes, there are several possibilities:
-	a) Add the [StaticProxy] attribute on top of each of your entity classes
-	b) If all of your entities derive from a common class, add the [StaticProxy] attribute on top of that class
-	c) Reference the [StaticProxy] as an assembly attribute in the AssemblyInfo.cs file of the project owning the entity classes: 
+	a) Add [StaticProxyAttribute] on top of each of your entity classes
+	b) If all of your entities derive from a common class, add [StaticProxyAttribute] on top of that class
+	c) Reference [StaticProxyAttribute] as an assembly attribute in the AssemblyInfo.cs file of the project owning the entity classes: 
 		
 		[assembly: StaticProxy(AttributeTargetTypes = "NHStaticProxy.Tests.Entities.*",
 							   AttributeTargetTypeAttributes = MulticastAttributes.Public,
@@ -30,7 +30,7 @@ In order to get things work, you need to:
 
 	   More infos here : http://doc.sharpcrafters.com/postsharp/2.0/##PostSharp.chm/html/1B05CE59-61DE-4043-8E7C-12C130B1ACBB.htm
 
-Now, it's time to configure NHibernate, so it uses the custom ProxyFactoryFactory.
+Now, it's time to configure NHibernate, so it uses the custom StaticProxyFactoryFactory.
 
 5) var configuration = new Configuration();
-   configuration.Proxy(proxy => proxy.ProxyFactoryFactory<NHStaticProxy.StaticProxyFactoryFactory>());
+   configuration.Proxy(proxy => proxy.ProxyFactoryFactory<NHibernate.StaticProxy.StaticProxyFactoryFactory>());

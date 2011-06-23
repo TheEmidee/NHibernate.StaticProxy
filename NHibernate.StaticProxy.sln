@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{57FE5505-E1A3-46DB-A61A-789F3A2BE267}"
+	ProjectSection(SolutionItems) = preProject
+		README = README
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernate.StaticProxy", "NHibernate.StaticProxy\NHibernate.StaticProxy.csproj", "{51623325-C1BC-4EF4-A2B0-9A10F8258F0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernate.StaticProxy.Examples", "NHibernate.StaticProxy.Examples\NHibernate.StaticProxy.Examples.csproj", "{8B0CA1AA-3756-4081-85FF-351F27AD1370}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernate.StaticProxy.Tests", "NHibernate.StaticProxy.Tests\NHibernate.StaticProxy.Tests.csproj", "{504640F1-6696-4131-8684-7F13590BBD81}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51623325-C1BC-4EF4-A2B0-9A10F8258F0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51623325-C1BC-4EF4-A2B0-9A10F8258F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51623325-C1BC-4EF4-A2B0-9A10F8258F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51623325-C1BC-4EF4-A2B0-9A10F8258F0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B0CA1AA-3756-4081-85FF-351F27AD1370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0CA1AA-3756-4081-85FF-351F27AD1370}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B0CA1AA-3756-4081-85FF-351F27AD1370}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B0CA1AA-3756-4081-85FF-351F27AD1370}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504640F1-6696-4131-8684-7F13590BBD81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504640F1-6696-4131-8684-7F13590BBD81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504640F1-6696-4131-8684-7F13590BBD81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504640F1-6696-4131-8684-7F13590BBD81}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
