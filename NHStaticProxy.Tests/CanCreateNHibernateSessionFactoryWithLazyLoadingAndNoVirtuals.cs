@@ -15,13 +15,13 @@ namespace NHStaticProxy.Tests
         [Fact]
         public void ProxyFactoryFactoryIsSetProperly()
         {
-            Assert.IsType<ProxyFactoryFactory>(Environment.BytecodeProvider.ProxyFactoryFactory);
+            Assert.IsType<StaticProxyFactoryFactory>(Environment.BytecodeProvider.ProxyFactoryFactory);
         }
 
         [Fact]
         public void ProxyValidatorIsSetProperly()
         {
-            Assert.IsType<ProxyValidator>(Environment.BytecodeProvider.ProxyFactoryFactory.ProxyValidator);
+            Assert.IsType<StaticProxyValidator>(Environment.BytecodeProvider.ProxyFactoryFactory.ProxyValidator);
         }
     }
 }

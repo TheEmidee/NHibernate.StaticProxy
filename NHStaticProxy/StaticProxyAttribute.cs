@@ -12,9 +12,9 @@ using PostSharp.Reflection;
 namespace NHStaticProxy
 {
     [Serializable]
-    [IntroduceInterface(typeof(IPostSharpNHibernateProxy), OverrideAction = InterfaceOverrideAction.Ignore)]
+    [IntroduceInterface(typeof(INHibernateStaticProxy), OverrideAction = InterfaceOverrideAction.Ignore)]
     [MulticastAttributeUsage(MulticastTargets.Class, Inheritance = MulticastInheritance.Strict)]
-    public class StaticProxy : InstanceLevelAspect, IPostSharpNHibernateProxy
+    public class StaticProxyAttribute : InstanceLevelAspect, INHibernateStaticProxy
     {
         [NonSerialized]
         private readonly IList<object> mappedMembers = new List<object>();
@@ -33,10 +33,7 @@ namespace NHStaticProxy
             }
 
             if (!mappedMembers.Any())
-            {
                 Message.Write(SeverityType.Warning, "NoMappings", string.Format("No mappings were found for the type: {0}.", type.FullName));
-                return false;
-            }
             
             return true;
         }
@@ -115,7 +112,7 @@ namespace NHStaticProxy
 
             if (proxy != null)
             {
-                proxy.InterceptGet(args);
+                args.Value = proxy.InterceptGet(args.Binding);
                 return;
             }
 
@@ -129,7 +126,7 @@ namespace NHStaticProxy
 
             if (proxy != null)
             {
-                proxy.InterceptSet(args);
+                proxy.InterceptSet(args.Binding, args.Value);
                 return;
             }
 

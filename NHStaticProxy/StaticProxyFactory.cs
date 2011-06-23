@@ -4,11 +4,11 @@ using NHibernate.Proxy;
 
 namespace NHStaticProxy
 {
-    public class ProxyFactory : AbstractProxyFactory
+    public class StaticProxyFactory : AbstractProxyFactory
     {
         public override INHibernateProxy GetProxy(object id, ISessionImplementor session)
         {
-            var instance = (IPostSharpNHibernateProxy)Activator.CreateInstance(PersistentClass);
+            var instance = (INHibernateStaticProxy)Activator.CreateInstance(PersistentClass);
             var initializer = new StaticProxyLazyInitializer(EntityName, PersistentClass, id, session);
 
             instance.SetInterceptor(initializer);

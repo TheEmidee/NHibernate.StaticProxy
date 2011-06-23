@@ -5,7 +5,7 @@ using NHibernate.Proxy;
 
 namespace NHStaticProxy
 {
-    public class ProxyValidator : IProxyValidator
+    public class StaticProxyValidator : IProxyValidator
     {
         public ICollection<string> ValidateType(Type type)
         {

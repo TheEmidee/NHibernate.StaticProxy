@@ -1,6 +1,5 @@
 ﻿using System;
 using NHibernate.Engine;
-using NHibernate.Mapping;
 using PostSharp.Aspects;
 
 namespace NHStaticProxy
@@ -25,18 +24,18 @@ namespace NHStaticProxy
             Initialize();
         }
 
-        public void InterceptGet(LocationInterceptionArgs eventArgs)
+        public object InterceptGet(ILocationBinding binding)
         {
             InitializeIfNeeded();
 
-            eventArgs.Value = eventArgs.Binding.GetValue(ref _target, null);
+            return binding.GetValue(ref target, null);
         }
 
-        public void InterceptSet(LocationInterceptionArgs eventArgs)
+        public void InterceptSet(ILocationBinding binding, object value)
         {
             InitializeIfNeeded();
 
-            eventArgs.Binding.SetValue(ref _target, null, eventArgs.Value);
+            binding.SetValue(ref target, null, value);
         }
     }
 }

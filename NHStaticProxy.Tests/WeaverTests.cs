@@ -16,15 +16,15 @@ namespace NHStaticProxy.Tests
         [Fact]
         public void Entities_Implement_IPostSharpNHibernateProxy()
         {
-            Assert.True(Activator.CreateInstance(typeof(Customer)) is IPostSharpNHibernateProxy);
-            Assert.True(Activator.CreateInstance(typeof(Order)) is IPostSharpNHibernateProxy);
+            Assert.True(Activator.CreateInstance(typeof(Customer)) is INHibernateStaticProxy);
+            Assert.True(Activator.CreateInstance(typeof(Order)) is INHibernateStaticProxy);
         }
 
         [Fact]
         public void Entities_DerivingFromBase_ImplementIPostSharpNHibernateProxy()
         {
-            Assert.True(Activator.CreateInstance(typeof(Customer2)) is IPostSharpNHibernateProxy);
-            Assert.True(Activator.CreateInstance(typeof(Order2)) is IPostSharpNHibernateProxy);
+            Assert.True(Activator.CreateInstance(typeof(Customer2)) is INHibernateStaticProxy);
+            Assert.True(Activator.CreateInstance(typeof(Order2)) is INHibernateStaticProxy);
         }
 
         [Fact]
@@ -34,13 +34,13 @@ namespace NHStaticProxy.Tests
 
             var stub = new Mock<IStaticProxyLazyInitializer>();
 
-            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+            var nhProxy = Post.Cast<Customer, INHibernateStaticProxy>(cust);
 
             nhProxy.SetInterceptor(stub.Object);
 
             cust.Name = "Zoubi";
 
-            stub.Verify(x => x.InterceptSet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+            stub.Verify(x => x.InterceptSet(It.IsAny<ILocationBinding>(), "Zoubi"), Times.Once());
         }
 
         [Fact]
@@ -51,13 +51,13 @@ namespace NHStaticProxy.Tests
 
             var stub = new Mock<IStaticProxyLazyInitializer>();
 
-            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+            var nhProxy = Post.Cast<Customer, INHibernateStaticProxy>(cust);
 
             nhProxy.SetInterceptor(stub.Object);
 
             var str = cust.Name;
 
-            stub.Verify(x => x.InterceptGet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+            stub.Verify(x => x.InterceptGet(It.IsAny<ILocationBinding>()), Times.Once());
         }
 
         [Fact]
@@ -67,13 +67,13 @@ namespace NHStaticProxy.Tests
 
             var stub = new Mock<IStaticProxyLazyInitializer>();
 
-            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+            var nhProxy = Post.Cast<Customer, INHibernateStaticProxy>(cust);
 
             nhProxy.SetInterceptor(stub.Object);
 
             cust.PropertyWithField = "PropertyWithField";
 
-            stub.Verify(x => x.InterceptSet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+            stub.Verify(x => x.InterceptSet(It.IsAny<ILocationBinding>(), "PropertyWithField"), Times.Once());
         }
 
         [Fact]
@@ -84,13 +84,13 @@ namespace NHStaticProxy.Tests
 
             var stub = new Mock<IStaticProxyLazyInitializer>();
 
-            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+            var nhProxy = Post.Cast<Customer, INHibernateStaticProxy>(cust);
 
             nhProxy.SetInterceptor(stub.Object);
 
             var str = cust.PropertyWithField;
 
-            stub.Verify(x => x.InterceptGet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+            stub.Verify(x => x.InterceptGet(It.IsAny<ILocationBinding>()), Times.Once());
         }
 
         [Fact]
@@ -100,13 +100,13 @@ namespace NHStaticProxy.Tests
 
             var stub = new Mock<IStaticProxyLazyInitializer>();
 
-            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+            var nhProxy = Post.Cast<Customer, INHibernateStaticProxy>(cust);
 
             nhProxy.SetInterceptor(stub.Object);
 
             cust.fieldOnly = "fieldOnly";
 
-            stub.Verify(x => x.InterceptSet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+            stub.Verify(x => x.InterceptSet(It.IsAny<ILocationBinding>(), "fieldOnly"), Times.Once());
         }
 
         [Fact]
@@ -117,13 +117,13 @@ namespace NHStaticProxy.Tests
 
             var stub = new Mock<IStaticProxyLazyInitializer>();
 
-            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+            var nhProxy = Post.Cast<Customer, INHibernateStaticProxy>(cust);
 
             nhProxy.SetInterceptor(stub.Object);
 
             var str = cust.PropertyWithField;
 
-            stub.Verify(x => x.InterceptGet(It.IsAny<LocationInterceptionArgs>()), Times.Once());
+            stub.Verify(x => x.InterceptGet(It.IsAny<ILocationBinding>()), Times.Once());
         }
 
         [Fact]
@@ -133,13 +133,13 @@ namespace NHStaticProxy.Tests
 
             var stub = new Mock<IStaticProxyLazyInitializer>();
 
-            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+            var nhProxy = Post.Cast<Customer, INHibernateStaticProxy>(cust);
 
             nhProxy.SetInterceptor(stub.Object);
 
             cust.NotMapped = "Zoubi";
 
-            stub.Verify(x => x.InterceptSet(It.IsAny<LocationInterceptionArgs>()), Times.Never());
+            stub.Verify(x => x.InterceptSet(It.IsAny<ILocationBinding>(), "Zoubi"), Times.Never());
         }
 
         [Fact]
@@ -150,13 +150,13 @@ namespace NHStaticProxy.Tests
 
             var stub = new Mock<IStaticProxyLazyInitializer>();
 
-            var nhProxy = Post.Cast<Customer, IPostSharpNHibernateProxy>(cust);
+            var nhProxy = Post.Cast<Customer, INHibernateStaticProxy>(cust);
 
             nhProxy.SetInterceptor(stub.Object);
 
             var str = cust.NotMapped;
 
-            stub.Verify(x => x.InterceptGet(It.IsAny<LocationInterceptionArgs>()), Times.Never());
+            stub.Verify(x => x.InterceptGet(It.IsAny<ILocationBinding>()), Times.Never());
         }
     }
 }

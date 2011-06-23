@@ -28,7 +28,7 @@ namespace NHStaticProxy.Tests.Config
 
             configuration.SetProperty(Environment.CurrentSessionContextClass, "thread_static");
             configuration.SetProperty("connection.release_mode", "on_close");
-            configuration.Proxy(proxy => proxy.ProxyFactoryFactory<ProxyFactoryFactory>());
+            configuration.Proxy(proxy => proxy.ProxyFactoryFactory<StaticProxyFactoryFactory>());
 
             var modelMapperProvider = (IHbmMappingProvider)Activator.CreateInstance<TModelMapperProvider>();
 

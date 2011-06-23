@@ -9,151 +9,118 @@ namespace NHStaticProxy
     [Serializable]
     public abstract class AbstractLazyInitializer : ILazyInitializer
     {
-        protected object _target = (object)null;
+        private readonly string entityName;
+        private object id;
         private bool initialized;
-        private object _id;
-        [NonSerialized]
-        private ISessionImplementor _session;
-        private bool unwrap;
-        private readonly string _entityName;
         private bool readOnly;
         private bool? readOnlyBeforeAttachedToSession;
+        [NonSerialized] private ISessionImplementor session;
+        protected object target;
+        private bool unwrap;
 
-        protected internal bool IsConnectedToSession
+        protected internal AbstractLazyInitializer(string entityName, object id, ISessionImplementor session)
         {
-            get
-            {
-                return this.GetProxyOrNull() != null;
-            }
+            this.id = id;
+            this.entityName = entityName;
+            if (session == null)
+                UnsetSession();
+            else
+                SetSession(session);
         }
+
+        private bool IsConnectedToSession
+        {
+            get { return GetProxyOrNull() != null; }
+        }
+
+        protected internal object Target
+        {
+            get { return target; }
+        }
+
+        #region ILazyInitializer Members
 
         public object Identifier
         {
-            get
-            {
-                return this._id;
-            }
-            set
-            {
-                this._id = value;
-            }
+            get { return id; }
+            set { id = value; }
         }
 
         public abstract Type PersistentClass { get; }
 
         public bool IsUninitialized
         {
-            get
-            {
-                return !this.initialized;
-            }
+            get { return !initialized; }
         }
 
         public bool Unwrap
         {
-            get
-            {
-                return this.unwrap;
-            }
-            set
-            {
-                this.unwrap = value;
-            }
+            get { return unwrap; }
+            set { unwrap = value; }
         }
 
         public ISessionImplementor Session
         {
-            get
-            {
-                return this._session;
-            }
+            get { return session; }
             set
             {
-                if (value != this._session)
+                if (value != session)
                 {
-                    if (value != null && this.IsConnectedToSession)
-                        throw new LazyInitializationException(this._entityName, this._id, "Illegally attempted to associate a proxy with two open Sessions");
-                    else
-                        this._session = value;
+                    if (value != null && IsConnectedToSession)
+                        throw new LazyInitializationException(entityName, id, "Illegally attempted to associate a proxy with two open Sessions");
+                    
+                    session = value;
                 }
             }
         }
 
         public string EntityName
         {
-            get
-            {
-                return this._entityName;
-            }
-        }
-
-        protected internal object Target
-        {
-            get
-            {
-                return this._target;
-            }
+            get { return entityName; }
         }
 
         public bool IsReadOnlySettingAvailable
         {
-            get
-            {
-                return this._session != null && !this._session.IsClosed;
-            }
+            get { return session != null && !session.IsClosed; }
         }
 
         public bool ReadOnly
         {
             get
             {
-                this.ErrorIfReadOnlySettingNotAvailable();
-                return this.readOnly;
+                ErrorIfReadOnlySettingNotAvailable();
+                return readOnly;
             }
             set
             {
-                this.ErrorIfReadOnlySettingNotAvailable();
-                if (this.readOnly != value)
-                    this.SetReadOnly(value);
+                ErrorIfReadOnlySettingNotAvailable();
+                if (readOnly != value)
+                    SetReadOnly(value);
             }
-        }
-
-        static AbstractLazyInitializer()
-        {
-        }
-
-        protected internal AbstractLazyInitializer(string entityName, object id, ISessionImplementor session)
-        {
-            this._id = id;
-            this._entityName = entityName;
-            if (session == null)
-                this.UnsetSession();
-            else
-                this.SetSession(session);
         }
 
         public void SetSession(ISessionImplementor s)
         {
-            if (s != this._session)
+            if (s != session)
             {
                 if (s == null)
-                    this.UnsetSession();
-                else if (this.IsConnectedToSession)
+                    UnsetSession();
+                else if (IsConnectedToSession)
                 {
                     throw new HibernateException("illegally attempted to associate a proxy with two open Sessions");
                 }
                 else
                 {
-                    this._session = s;
-                    if (!this.readOnlyBeforeAttachedToSession.HasValue)
+                    session = s;
+                    if (!readOnlyBeforeAttachedToSession.HasValue)
                     {
-                        IEntityPersister entityPersister = s.Factory.GetEntityPersister(this._entityName);
-                        this.SetReadOnly(s.PersistenceContext.DefaultReadOnly || !entityPersister.IsMutable);
+                        IEntityPersister entityPersister = s.Factory.GetEntityPersister(entityName);
+                        SetReadOnly(s.PersistenceContext.DefaultReadOnly || !entityPersister.IsMutable);
                     }
                     else
                     {
-                        this.SetReadOnly(this.readOnlyBeforeAttachedToSession.Value);
-                        this.readOnlyBeforeAttachedToSession = new bool?();
+                        SetReadOnly(readOnlyBeforeAttachedToSession.Value);
+                        readOnlyBeforeAttachedToSession = new bool?();
                     }
                 }
             }
@@ -161,98 +128,93 @@ namespace NHStaticProxy
 
         public void UnsetSession()
         {
-            this._session = (ISessionImplementor)null;
-            this.readOnly = false;
-            this.readOnlyBeforeAttachedToSession = new bool?();
+            session = null;
+            readOnly = false;
+            readOnlyBeforeAttachedToSession = new bool?();
         }
 
         public virtual void Initialize()
         {
-            if (!this.initialized)
+            if (!initialized)
             {
-                if (this._session == null)
-                    throw new LazyInitializationException(this._entityName, this._id, "Could not initialize proxy - no Session.");
-                else if (!this._session.IsOpen)
-                    throw new LazyInitializationException(this._entityName, this._id, "Could not initialize proxy - the owning Session was closed.");
-                else if (!this._session.IsConnected)
-                {
-                    throw new LazyInitializationException(this._entityName, this._id, "Could not initialize proxy - the owning Session is disconnected.");
-                }
-                else
-                {
-                    this._target = this._session.ImmediateLoad(this._entityName, this._id);
-                    this.initialized = true;
-                    this.CheckTargetState();
-                }
+                if (session == null)
+                    throw new LazyInitializationException(entityName, id, "Could not initialize proxy - no Session.");
+                if (!session.IsOpen)
+                    throw new LazyInitializationException(entityName, id, "Could not initialize proxy - the owning Session was closed.");
+                if (!session.IsConnected)
+                    throw new LazyInitializationException(entityName, id, "Could not initialize proxy - the owning Session is disconnected.");
+
+                target = session.ImmediateLoad(entityName, id);
+                initialized = true;
+                CheckTargetState();
             }
             else
-                this.CheckTargetState();
+                CheckTargetState();
         }
 
         public object GetImplementation()
         {
-            this.Initialize();
-            return this._target;
+            Initialize();
+            return target;
         }
 
         public object GetImplementation(ISessionImplementor s)
         {
-            EntityKey key = new EntityKey(this.Identifier, s.Factory.GetEntityPersister(this.EntityName), s.EntityMode);
+            var key = new EntityKey(Identifier, s.Factory.GetEntityPersister(EntityName), s.EntityMode);
             return s.PersistenceContext.GetEntity(key);
         }
 
         public void SetImplementation(object target)
         {
-            this._target = target;
-            this.initialized = true;
+            this.target = target;
+            initialized = true;
         }
+
+        #endregion
 
         private void ErrorIfReadOnlySettingNotAvailable()
         {
-            if (this._session == null)
+            if (session == null)
                 throw new TransientObjectException("Proxy is detached (i.e, session is null). The read-only/modifiable setting is only accessible when the proxy is associated with an open session.");
-            else if (this._session.IsClosed)
+            
+            if (session.IsClosed)
                 throw new SessionException("Session is closed. The read-only/modifiable setting is only accessible when the proxy is associated with an open session.");
         }
 
         private static EntityKey GenerateEntityKeyOrNull(object id, ISessionImplementor s, string entityName)
         {
             if (id == null || s == null || entityName == null)
-                return (EntityKey)null;
-            else
-                return new EntityKey(id, s.Factory.GetEntityPersister(entityName), s.EntityMode);
+                return null;
+            
+            return new EntityKey(id, s.Factory.GetEntityPersister(entityName), s.EntityMode);
         }
 
         private void CheckTargetState()
         {
-            if (!this.unwrap && this._target == null)
-                this.Session.Factory.EntityNotFoundDelegate.HandleEntityNotFound(this._entityName, this._id);
+            if (!unwrap && target == null)
+                Session.Factory.EntityNotFoundDelegate.HandleEntityNotFound(entityName, id);
         }
 
         private object GetProxyOrNull()
         {
-            EntityKey key = AbstractLazyInitializer.GenerateEntityKeyOrNull(this._id, this._session, this._entityName);
-            if (key != null && this._session != null && this._session.IsOpen)
-                return this._session.PersistenceContext.GetProxy(key);
-            else
-                return (object)null;
+            EntityKey key = GenerateEntityKeyOrNull(id, session, entityName);
+            if (key != null && session != null && session.IsOpen)
+                return session.PersistenceContext.GetProxy(key);
+            
+            return null;
         }
 
         private void SetReadOnly(bool readOnly)
         {
-            if (!this._session.Factory.GetEntityPersister(this._entityName).IsMutable && !readOnly)
-            {
+            if (!session.Factory.GetEntityPersister(entityName).IsMutable && !readOnly)
                 throw new InvalidOperationException("cannot make proxies for immutable entities modifiable");
-            }
-            else
+            
+            this.readOnly = readOnly;
+            if (initialized)
             {
-                this.readOnly = readOnly;
-                if (this.initialized)
-                {
-                    EntityKey key = AbstractLazyInitializer.GenerateEntityKeyOrNull(this._id, this._session, this._entityName);
-                    if (key != null && this._session.PersistenceContext.ContainsEntity(key))
-                        this._session.PersistenceContext.SetReadOnly(this._target, readOnly);
-                }
+                EntityKey key = GenerateEntityKeyOrNull(id, session, entityName);
+                if (key != null && session.PersistenceContext.ContainsEntity(key))
+                    session.PersistenceContext.SetReadOnly(target, readOnly);
             }
         }
     }

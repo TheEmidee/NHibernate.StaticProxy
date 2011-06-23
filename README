@@ -33,4 +33,4 @@ In order to get things work, you need to:
 Now, it's time to configure NHibernate, so it uses the custom ProxyFactoryFactory.
 
 5) var configuration = new Configuration();
-   configuration.Proxy(proxy => proxy.ProxyFactoryFactory<NHStaticProxy.ProxyFactoryFactory>());
+   configuration.Proxy(proxy => proxy.ProxyFactoryFactory<NHStaticProxy.StaticProxyFactoryFactory>());

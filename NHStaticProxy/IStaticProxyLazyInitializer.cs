@@ -4,7 +4,7 @@ namespace NHStaticProxy
 {
     public interface IStaticProxyLazyInitializer : NHibernate.Proxy.ILazyInitializer
     {
-        void InterceptGet(LocationInterceptionArgs eventArgs);
-        void InterceptSet(LocationInterceptionArgs eventArgs);
+        object InterceptGet(ILocationBinding binding);
+        void InterceptSet(ILocationBinding binding, object value);
     }
 }
