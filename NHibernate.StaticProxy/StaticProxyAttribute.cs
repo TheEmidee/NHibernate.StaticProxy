@@ -28,7 +28,7 @@ namespace NHibernate.StaticProxy
         {
             if (mappings == null)
             {
-                Message.Write(SeverityType.Error, "NoStaticProxyConfigurationAttribute", string.Format("Impossible to find an assembly attribute derived from {0} in the assembly {1}.", typeof(StaticProxyConfigurationAttribute).FullName, type.Assembly.FullName));
+                Message.Write(SeverityType.Error, "NoStaticProxyConfigurationAttribute", string.Format("Impossible to find an assembly attribute derived from {0} to weave the type {1}.", typeof(StaticProxyConfigurationAttribute).FullName, type.FullName));
                 return false;
             }
 
